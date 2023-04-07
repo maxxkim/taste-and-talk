@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/views/auth/register.dart';
-import '/views/home.dart';
+import '/views/events.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key, required this.title});
@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) => const EventsPage(),
                             ));
                       }
                     },

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'layouts/palette.dart';
 import '/views/personal.dart';
 import '/views/events.dart';
-import '/views/calendar.dart';
+import '/views/settings.dart';
 import '/views/admin/admin.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _CalendarPageState extends State<CalendarPage> {
   int _selectedIndex = 0;
   static const List<Widget> _pages = <Widget>[
     PersonalPage(),

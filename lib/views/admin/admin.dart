@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'layouts/palette.dart';
+import '../layouts/palette.dart';
 import '/views/personal.dart';
 import '/views/events.dart';
+import '/views/settings.dart';
 import '/views/calendar.dart';
-import '/views/admin/admin.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class AdminPage extends StatefulWidget {
+  const AdminPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<AdminPage> createState() => _AdminPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _AdminPageState extends State<AdminPage> {
   int _selectedIndex = 0;
   static const List<Widget> _pages = <Widget>[
     PersonalPage(),
