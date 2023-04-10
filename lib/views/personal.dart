@@ -1,67 +1,68 @@
 import 'package:flutter/material.dart';
-import 'layouts/palette.dart';
-import '/views/calendar.dart';
-import '/views/events.dart';
-import '/views/settings.dart';
-import '/views/admin/admin.dart';
 
-class PersonalPage extends StatefulWidget {
-  const PersonalPage({super.key});
+class PersonalPage extends StatelessWidget {
+  final String avatarUrl;
+  final String firstName;
+  final String lastName;
+  final String position;
+  final String email;
+  final String dateOfBirth;
 
-  @override
-  State<PersonalPage> createState() => _PersonalPageState();
-}
+  const PersonalPage({
+    Key? key,
+    required this.avatarUrl,
+    required this.firstName,
+    required this.lastName,
+    required this.position,
+    required this.email,
+    required this.dateOfBirth,
+  }) : super(key: key);
 
-class _PersonalPageState extends State<PersonalPage> {
-  int _selectedIndex = 0;
-  static const List<Widget> _pages = <Widget>[
-    PersonalPage(),
-    EventsPage(),
-    CalendarPage(),
-    AdminPage(),
-    SettingsPage()
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFf2f2f2),
       appBar: AppBar(
-        title: const Text('Taste & Talk'),
+        title: Text('$firstName $lastName'),
       ),
-      body: Center(child: _pages.elementAt(_selectedIndex)),
-      bottomNavigationBar:
-          BottomNavigationBar(items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.person),
-          label: 'Personal',
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(avatarUrl),
+                radius: 80,
+              ),
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Name:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text('$firstName $lastName', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 8),
+            Text(
+              'Position:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(position, style: TextStyle(fontSize: 16)),
+            SizedBox(height: 8),
+            Text(
+              'Email:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(email, style: TextStyle(fontSize: 16)),
+            SizedBox(height: 8),
+            Text(
+              'Date of birth:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(dateOfBirth, style: TextStyle(fontSize: 16)),
+          ],
         ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.wine_bar),
-          label: 'Events',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.calendar_month),
-          label: 'Calendar',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.admin_panel_settings),
-          label: 'Admin',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.settings),
-          label: 'Settings',
-        ),
-      ], currentIndex: _selectedIndex, onTap: _onItemTapped),
+      ),
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }

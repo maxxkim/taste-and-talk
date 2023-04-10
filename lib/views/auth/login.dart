@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '/views/auth/register.dart';
 import '/views/events.dart';
+import '/views/home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key, required this.title});
@@ -20,6 +22,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFf2f2f2),
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -75,7 +78,7 @@ class _LoginState extends State<Login> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const EventsPage(),
+                              builder: (context) => const HomePage(),
                             ));
                       }
                     },
@@ -87,18 +90,30 @@ class _LoginState extends State<Login> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                 child: Center(
-                  child: ElevatedButton(
-                    child: const Text('No account yet?'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const Register(title: 'Sign up')),
-                      );
-                    },
-                  ),
-                ),
+                    child: Column(
+                  children: [
+                    ElevatedButton(
+                      child: const Text('No account yet?'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const Register(title: 'Sign up')),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      child: Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: SizedBox(
+                            width: 300,
+                            height: 300,
+                            child: SvgPicture.asset("logo.svg")),
+                      ),
+                    )
+                  ],
+                )),
               ),
             ],
           ),

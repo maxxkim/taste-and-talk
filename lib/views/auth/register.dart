@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '/views/auth/login.dart';
 
 class Register extends StatefulWidget {
@@ -19,6 +20,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFf2f2f2),
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -77,7 +79,14 @@ class _RegisterState extends State<Register> {
                       } on FirebaseAuthException catch (e) {
                         if (e.code == "weak-password") {
                           print('The password provided is too weak.');
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('The password provided is too weak.'),
+                          ));
                         } else if (e.code == "email-already-in-use") {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('Such email has been already registered.'),
+                          ));
                           print('An account already exists for that email.');
                         }
                       } catch (e) {
@@ -92,18 +101,30 @@ class _RegisterState extends State<Register> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                 child: Center(
-                  child: ElevatedButton(
-                    child: const Text('Already got an account?'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const Login(title: 'Sign in')),
-                      );
-                    },
-                  ),
-                ),
+                    child: Column(
+                  children: [
+                    ElevatedButton(
+                      child: const Text('Already have an account?'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const Login(title: 'Sign in')),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      child: Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: SizedBox(
+                            width: 300,
+                            height: 300,
+                            child: SvgPicture.asset("logo.svg")),
+                      ),
+                    )
+                  ],
+                )),
               ),
             ],
           ),

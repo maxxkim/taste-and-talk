@@ -1,67 +1,50 @@
+import '/views/admin/employee/index.dart';
 import 'package:flutter/material.dart';
-import '../layouts/palette.dart';
-import '/views/personal.dart';
-import '/views/events.dart';
-import '/views/settings.dart';
-import '/views/calendar.dart';
 
 class AdminPage extends StatefulWidget {
-  const AdminPage({super.key});
+  const AdminPage({Key? key}) : super(key: key);
 
   @override
-  State<AdminPage> createState() => _AdminPageState();
+  _AdminPageState createState() => _AdminPageState();
 }
 
-class _AdminPageState extends State<AdminPage> {
-  int _selectedIndex = 0;
-  static const List<Widget> _pages = <Widget>[
-    PersonalPage(),
-    EventsPage(),
-    CalendarPage(),
-    AdminPage(),
-    SettingsPage()
-  ];
+class _AdminPageState extends State<AdminPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFf2f2f2),
       appBar: AppBar(
-        title: const Text('Taste & Talk'),
+        title: Text("Administrator's panel"),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(text: 'Users'),
+            Tab(text: 'Events'),
+          ],
+        ),
       ),
-      body: Center(child: _pages.elementAt(_selectedIndex)),
-      bottomNavigationBar:
-          BottomNavigationBar(items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.person),
-          label: 'Personal',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.wine_bar),
-          label: 'Events',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.calendar_month),
-          label: 'Calendar',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.admin_panel_settings),
-          label: 'Admin',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Palette.kToDark,
-          icon: Icon(Icons.settings),
-          label: 'Settings',
-        ),
-      ], currentIndex: _selectedIndex, onTap: _onItemTapped),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          Center(child: ListPage()),
+          Center(child: Text('Here you will be able to manage events')),
+        ],
+      ),
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }
