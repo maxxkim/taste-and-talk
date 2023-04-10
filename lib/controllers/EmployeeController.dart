@@ -73,4 +73,21 @@ class EmployeeController {
 
     return response;
   }
+
+  static Future<Response> delete({
+    required String docId,
+  }) async {
+    Response response = Response();
+    DocumentReference documentReferencer = _Collection.doc(docId);
+
+    await documentReferencer.delete().whenComplete(() {
+      response.code = 200;
+      response.message = "Sucessfully Deleted Employee";
+    }).catchError((e) {
+      response.code = 500;
+      response.message = e;
+    });
+
+    return response;
+  }
 }

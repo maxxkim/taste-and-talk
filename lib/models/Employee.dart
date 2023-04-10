@@ -1,4 +1,5 @@
 class Employee {
+  String docId;
   String firstName;
   String lastName;
   String position;
@@ -7,6 +8,7 @@ class Employee {
   String email;
 
   Employee({
+    required this.docId,
     required this.firstName,
     required this.lastName,
     required this.position,

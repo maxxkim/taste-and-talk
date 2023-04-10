@@ -82,10 +82,13 @@ class _ListPage extends State<ListPage> {
                               MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) => EditPage(
                                   employee: Employee(
-                                      uid: e.id,
-                                      employeename: e["employee_name"],
+                                      docId: e.id,
+                                      firstName: e["firstName"],
+                                      lastName: e["lastName"],
                                       position: e["position"],
-                                      contactno: e["contact_no"]),
+                                      avatarURL: e["avatarURL"],
+                                      dateOfBirth: e["dateOfBirth"],
+                                      email: e["email"]),
                                 ),
                               ),
                               (route) =>
@@ -102,7 +105,7 @@ class _ListPage extends State<ListPage> {
                           child: const Text('Delete'),
                           onPressed: () async {
                             var response =
-                                await FirebaseCrud.deleteEmployee(docId: e.id);
+                                await EmployeeController.delete(docId: e.id);
                             if (response.code != 200) {
                               showDialog(
                                   context: context,
