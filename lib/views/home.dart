@@ -4,6 +4,7 @@ import '/views/personal.dart';
 import '/views/calendar.dart';
 import '/views/settings.dart';
 import '/views/events.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '/views/admin/admin.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final user = FirebaseAuth.instance.currentUser;
+
   var selectedIndex = 0; // ← Add this property.
 
   @override

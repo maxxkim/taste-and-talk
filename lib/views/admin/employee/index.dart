@@ -1,134 +1,87 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
-import '/controllers/EmployeeController.dart';
-import '/views/admin/employee/edit.dart';
-import '/views/admin/employee/create.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '/models/Employee.dart';
+import '/controllers/EmployeeController.dart';
+import '/views/admin/employee/index.dart';
 
 class ListPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return _ListPage();
-  }
+  _ListPageState createState() => _ListPageState();
 }
 
-class _ListPage extends State<ListPage> {
-  final Stream<QuerySnapshot> collectionReference = EmployeeController.read();
-  //FirebaseFirestore.instance.collection('Employee').snapshots();
+class _ListPageState extends State<ListPage> {
+  DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+  final TextEditingController _editNameController = TextEditingController();
+  final TextEditingController _editPositionController = TextEditingController();
+  final TextEditingController _editEmailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("List of Employee"),
-        backgroundColor: Theme.of(context).primaryColor,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.app_registration,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => AddPage(),
-                ),
-                (route) =>
-                    false, //if you want to disable back feature set to false
-              );
-            },
-          )
-        ],
-      ),
-      body: StreamBuilder(
-        stream: collectionReference,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: ListView(
-                children: snapshot.data!.docs.map((e) {
-                  return Card(
-                      child: Column(children: [
-                    ListTile(
-                      title: Text(e["employee_name"]),
-                      subtitle: Container(
-                        child: (Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("Position: " + e['position'],
-                                style: const TextStyle(fontSize: 14)),
-                            Text("Contact Number: " + e['contact_no'],
-                                style: const TextStyle(fontSize: 12)),
-                          ],
-                        )),
+      backgroundColor: Color(0xFFf2f2f2),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            employeeDialog();
+          },
+          child: const Icon(Icons.add)),
+    );
+  }
+
+  void employeeDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Color(0xFFf2f2f2),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: _editNameController,
+                    decoration: const InputDecoration(helperText: "Name"),
+                  ),
+                  TextField(
+                      controller: _editPositionController,
+                      decoration:
+                          const InputDecoration(helperText: "Position")),
+                  TextField(
+                      controller: _editEmailController,
+                      decoration: const InputDecoration(helperText: "Email")),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Map<String, dynamic> data = {
+                          "name": _editNameController.text.toString(),
+                          "position": _editPositionController.text.toString(),
+                          "email": _editEmailController.text.toString(),
+                        };
+                        dbRef.child("Employee").push().set(data).then((value) {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: const Text("Save")),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      child: Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: SizedBox(
+                            width: 300,
+                            height: 300,
+                            child: SvgPicture.asset("logo.svg")),
                       ),
                     ),
-                    ButtonBar(
-                      alignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(5.0),
-                            primary: const Color.fromARGB(255, 143, 133, 226),
-                            textStyle: const TextStyle(fontSize: 20),
-                          ),
-                          child: const Text('Edit'),
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil<dynamic>(
-                              context,
-                              MaterialPageRoute<dynamic>(
-                                builder: (BuildContext context) => EditPage(
-                                  employee: Employee(
-                                      docId: e.id,
-                                      firstName: e["firstName"],
-                                      lastName: e["lastName"],
-                                      position: e["position"],
-                                      avatarURL: e["avatarURL"],
-                                      dateOfBirth: e["dateOfBirth"],
-                                      email: e["email"]),
-                                ),
-                              ),
-                              (route) =>
-                                  false, //if you want to disable back feature set to false
-                            );
-                          },
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(5.0),
-                            primary: const Color.fromARGB(255, 143, 133, 226),
-                            textStyle: const TextStyle(fontSize: 20),
-                          ),
-                          child: const Text('Delete'),
-                          onPressed: () async {
-                            var response =
-                                await EmployeeController.delete(docId: e.id);
-                            if (response.code != 200) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content:
-                                          Text(response.message.toString()),
-                                    );
-                                  });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ]));
-                }).toList(),
+                  )
+                ],
               ),
-            );
-          }
-
-          return Container();
-        },
-      ),
-    );
+            ),
+          );
+        });
   }
 }
