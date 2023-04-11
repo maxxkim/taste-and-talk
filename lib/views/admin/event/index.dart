@@ -1,47 +1,48 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '/models/Employee.dart';
+import '/models/Event.dart';
+import 'package:intl/intl.dart';
 
-class EmployeeListPage extends StatefulWidget {
+class EventListPage extends StatefulWidget {
   @override
-  _EmployeeListPageState createState() => _EmployeeListPageState();
+  _EventListPageState createState() => _EventListPageState();
 }
 
-class _EmployeeListPageState extends State<EmployeeListPage> {
+class _EventListPageState extends State<EventListPage> {
   DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+  late DateTime _selectedDate;
   final TextEditingController _editNameController = TextEditingController();
-  final TextEditingController _editPositionController = TextEditingController();
-  final TextEditingController _editEmailController = TextEditingController();
+  final TextEditingController _editLocationController = TextEditingController();
+  final TextEditingController _editDateController = TextEditingController();
 
-  List<Employee> employeeList = [];
+  List<Event> EventList = [];
 
   @override
   void initState() {
     super.initState();
 
-    retrieveEmployeeData();
+    retrieveEventData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFf2f2f2),
+      backgroundColor: const Color(0xFFf2f2f2),
       body: SingleChildScrollView(
         child: Column(children: [
-          for (int i = 0; i < employeeList.length; i++)
-            employeeWidget(employeeList[i])
+          for (int i = 0; i < EventList.length; i++) EventWidget(EventList[i])
         ]),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            employeeDialog();
+            EventDialog();
           },
           child: const Icon(Icons.add)),
     );
   }
 
-  void employeeDialog() {
+  void EventDialog() {
     showDialog(
         context: context,
         builder: (context) {
@@ -63,17 +64,22 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
-                        controller: _editPositionController,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Position")),
+                      controller: _editLocationController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: "Location"),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
-                        controller: _editEmailController,
+                        controller: _editDateController,
                         decoration: const InputDecoration(
-                            border: OutlineInputBorder(), labelText: "Email")),
+                            border: OutlineInputBorder(),
+                            labelText: "Date scheduled"),
+                        readOnly: true,
+                        onTap: () async {
+                          //_selectDate(context);
+                        }),
                   ),
                   const SizedBox(
                     height: 10,
@@ -82,10 +88,10 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                       onPressed: () {
                         Map<String, dynamic> data = {
                           "name": _editNameController.text.toString(),
-                          "position": _editPositionController.text.toString(),
-                          "email": _editEmailController.text.toString(),
+                          "location": _editLocationController.text.toString(),
+                          "date": _editDateController.text.toString(),
                         };
-                        dbRef.child("Employee").push().set(data).then((value) {
+                        dbRef.child("Event").push().set(data).then((value) {
                           Navigator.of(context).pop();
                         });
                       },
@@ -109,18 +115,32 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
         });
   }
 
-  void retrieveEmployeeData() {
-    dbRef.child('Employee').onChildAdded.listen((data) {
-      EmployeeData employeeData =
-          EmployeeData.fromJson(data.snapshot.value as Map);
-      Employee employee =
-          Employee(key: data.snapshot.key, employeeData: employeeData);
-      employeeList.add(employee);
+  _selectDate(BuildContext context) async {
+    Future<DateTime?> newSelectedDate = showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2025));
+    if (newSelectedDate != null) {
+      _selectedDate = DateTime.parse(newSelectedDate.toString());
+      _editDateController
+        ..text = DateFormat.yMMMd().format(_selectedDate)
+        ..selection = TextSelection.fromPosition(TextPosition(
+            offset: _editDateController.text.length,
+            affinity: TextAffinity.upstream));
+    }
+  }
+
+  void retrieveEventData() {
+    dbRef.child('Event').onChildAdded.listen((data) {
+      EventData eventData = EventData.fromJson(data.snapshot.value as Map);
+      Event event = Event(key: data.snapshot.key, eventData: eventData);
+      EventList.add(event);
       setState(() {});
     });
   }
 
-  Widget employeeWidget(Employee employeeList) {
+  Widget EventWidget(Event EventList) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(5),
@@ -130,11 +150,16 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
           border: Border.all(color: Colors.black)),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         Column(children: [
-          Text(employeeList.employeeData!.name!),
-          Text(employeeList.employeeData!.position!),
-          Text(employeeList.employeeData!.email!),
+          Text(EventList.eventData!.name!),
+          Text(EventList.eventData!.location!),
+          Text(EventList.eventData!.date!.toString()),
         ])
       ]),
     );
   }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }

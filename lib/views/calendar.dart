@@ -1,3 +1,4 @@
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:flutter/material.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -12,12 +13,13 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
-        backgroundColor: Color(0xFFf2f2f2),
-        appBar: AppBar(
-          title: const Text('Calendar'),
-        ),
-        body: Center(),
-      );
+          backgroundColor: Color(0xFFf2f2f2),
+          appBar: AppBar(
+            title: const Text('Calendar'),
+          ),
+          body: SfDateRangePicker(
+            view: DateRangePickerView.year,
+          ));
     });
   }
 }

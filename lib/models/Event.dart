@@ -1,12 +1,19 @@
 class Event {
-  final String name;
-  final DateTime time;
-  final String service;
-  final String id;
+  String? key;
+  EventData? eventData;
 
-  Event(
-      {required this.name,
-      required this.time,
-      required this.service,
-      required this.id});
+  Event({this.key, this.eventData});
+}
+
+class EventData {
+  String? name;
+  String? location;
+  DateTime? date;
+
+  EventData({this.name, this.location, this.date});
+  EventData.fromJson(Map<dynamic, dynamic> json) {
+    name = json["name"];
+    location = json["location"];
+    date = json["date"];
+  }
 }

@@ -1,4 +1,5 @@
 import '/views/admin/employee/index.dart';
+import '/views/admin/event/index.dart';
 import 'package:flutter/material.dart';
 
 class AdminPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _AdminPageState extends State<AdminPage>
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(text: 'Users'),
+            Tab(text: 'Employees'),
             Tab(text: 'Events'),
           ],
         ),
@@ -41,8 +42,8 @@ class _AdminPageState extends State<AdminPage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          Center(child: ListPage()),
-          Center(child: Text('Here you will be able to manage events')),
+          Center(child: EmployeeListPage()),
+          Center(child: EventListPage()),
         ],
       ),
     );

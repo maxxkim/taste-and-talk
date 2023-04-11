@@ -49,6 +49,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '226621537996',
     projectId: 'loginapp-403c3',
     authDomain: 'loginapp-403c3.firebaseapp.com',
+    databaseURL:
+        'https://loginapp-403c3-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'loginapp-403c3.appspot.com',
     measurementId: 'G-QVC9J1MJJH',
   );

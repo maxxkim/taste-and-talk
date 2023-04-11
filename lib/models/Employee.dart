@@ -1,19 +1,19 @@
 class Employee {
-  String docId;
-  String firstName;
-  String lastName;
-  String position;
-  String dateOfBirth;
-  String avatarURL;
-  String email;
+  String? key;
+  EmployeeData? employeeData;
 
-  Employee({
-    required this.docId,
-    required this.firstName,
-    required this.lastName,
-    required this.position,
-    required this.dateOfBirth,
-    required this.avatarURL,
-    required this.email,
-  });
+  Employee({this.key, this.employeeData});
+}
+
+class EmployeeData {
+  String? name;
+  String? position;
+  String? email;
+
+  EmployeeData({this.name, this.position, this.email});
+  EmployeeData.fromJson(Map<dynamic, dynamic> json) {
+    name = json["name"];
+    position = json["position"];
+    email = json["email"];
+  }
 }
