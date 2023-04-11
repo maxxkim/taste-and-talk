@@ -19,3 +19,10 @@ The application provides some basic functionality for a Taste & Talk company's m
 
 - the application is to be integrated with a Taste & Talk company's CMS vie RESTful API provided by yClients;
 - the application is to be published to major mobile application stores;
+
+## Screenshots![image_2023-04-11_22-46-03 (2)](https://user-images.githubusercontent.com/31654141/231277473-caaeb017-9544-4e7f-8fa0-2632343c5e68.png)
+![image_2023-04-11_22-46-03 (3)](https://user-images.githubusercontent.com/31654141/231277482-f0f009dd-7bf8-4d8e-a95c-40128d99efdf.png)
+![image_2023-04-11_22-46-03 (4)](https://user-images.githubusercontent.com/31654141/231277485-772c7565-fe7b-4935-8cd3-d3e4f8ffa0f2.png)
+![image_2023-04-11_22-46-03](https://user-images.githubusercontent.com/31654141/231277490-7fa94308-be40-435a-a8e3-3cc56fd30a36.png)
+![image_2023-04-11_22-46-04 (2)](https://user-images.githubusercontent.com/31654141/231277494-427dcbbb-6252-4144-a506-ec15346e1e1a.png)
+![image_2023-04-11_22-46-04](https://user-images.githubusercontent.com/31654141/231277497-3bc1ea9d-8916-45ec-a434-9792b67adfa1.png)
